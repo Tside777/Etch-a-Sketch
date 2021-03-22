@@ -51,4 +51,4 @@ function colorSquare(square) {
 
 
 
-//createGrid(4);
+createGrid(4);
