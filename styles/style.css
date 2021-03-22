@@ -1,0 +1,19 @@
+/* html, body {
+    width: 100vw;
+    height: 100vh;
+}
+ */
+
+.main-container {
+    height: 500px;
+    width: 500px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 25%);
+    align-items: center;
+    justify-items: center;
+    border: 1px solid black;
+}
+
+.square {
+    
+}
