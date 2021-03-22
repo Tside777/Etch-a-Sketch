@@ -37,9 +37,15 @@ function createGrid(sideCount) {
     }
 }
 
+const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+
 function colorSquare(square) {
-    let randomColor = Math.floor(Math.random()*16777215).toString(16);
-    square.target.style.backgroundColor = '#' + randomColor;
+    let r = randomBetween(0, 255);
+    let g = randomBetween(0, 255);
+    let b = randomBetween(0, 255);
+    let rgb = `rgb(${r},${g},${b})`; // Collect all to a css color string
+
+    square.target.style.backgroundColor = rgb;
 }
 
 
