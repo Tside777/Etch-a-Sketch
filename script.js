@@ -1,8 +1,11 @@
-const mainContainer = document.querySelector('.main-container');
-const MAIN_HEIGHT = mainContainer.offsetHeight - 2;
+const sketchContainer = document.querySelector('.sketch-container');
+const MAIN_HEIGHT = sketchContainer.offsetHeight - 18;
 
 const sizeSelector = document.querySelector('#sizeSelect');
-console.log(sizeSelector)
+const clearButton = document.querySelector('#clearSketch');
+const blackButton = document.querySelector('#blackTiles');
+const colorButton = document.querySelector('#colorTiles');
+const eraserButton = document.querySelector('#eraser');
 
 sizeSelector.addEventListener('click', () => {
     let newSize = prompt('Enter the number of tiles per side');
@@ -11,16 +14,20 @@ sizeSelector.addEventListener('click', () => {
     } else if (newSize <= 0) {
         newSize = 1
     }
-    mainContainer.style.gridTemplateColumns = `repeat(${newSize}, 1fr)`
+    sketchContainer.style.gridTemplateColumns = `repeat(${newSize}, 1fr)`
 
     createGrid(newSize);
 })
 
+clearButton.addEventListener('click', clearGrid);
+
+blackButton.addEventListener('click', useBlack);
+colorButton.addEventListener('click', useColor);
+eraserButton.addEventListener('click', useEraser);
+
+
 function createGrid(sideCount) {
-    console.log(mainContainer.children[0]);
-    while (mainContainer.firstChild) {
-        mainContainer.removeChild(mainContainer.firstChild);
-    }
+    deleteGrid();
 
     let sideSize = MAIN_HEIGHT / sideCount;
     sideSize = sideSize.toString() + 'px';
@@ -32,10 +39,52 @@ function createGrid(sideCount) {
         newDiv.className = 'square';
         newDiv.style.height=sideSize;
         newDiv.style.width = sideSize;
-        newDiv.addEventListener('mouseover', colorSquare);
-        mainContainer.appendChild(newDiv);
+        sketchContainer.appendChild(newDiv);
+    }
+
+    useColor();
+
+    
+}
+
+
+function clearGrid() {
+    sketchContainer.childNodes.forEach(div => div.style.backgroundColor = 'white');
+}
+
+
+
+function deleteGrid() {
+    while (sketchContainer.firstChild) {
+        sketchContainer.removeChild(sketchContainer.firstChild);
     }
 }
+
+
+function useBlack() {
+    sketchContainer.childNodes.forEach((div) => {
+        div.removeEventListener('mouseover', colorSquare);
+        div.removeEventListener('mouseover', eraseSquare);
+        div.addEventListener('mouseover', blackSquare);
+    });
+}
+
+function useColor() {
+    sketchContainer.childNodes.forEach((div) => {
+        div.removeEventListener('mouseover', blackSquare);
+        div.removeEventListener('mouseover', eraseSquare);
+        div.addEventListener('mouseover', colorSquare);
+    });
+}
+
+function useEraser() {
+    sketchContainer.childNodes.forEach((div) => {
+        div.removeEventListener('mouseover', blackSquare);
+        div.removeEventListener('mouseover', colorSquare);
+        div.addEventListener('mouseover', eraseSquare);
+    });
+}
+
 
 const randomBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 
@@ -48,7 +97,13 @@ function colorSquare(square) {
     square.target.style.backgroundColor = rgb;
 }
 
+function blackSquare(square) {
+    square.target.style.backgroundColor = 'black';
+}
 
+function eraseSquare(square) {
+    square.target.style.backgroundColor = 'white';
+}
 
 
 createGrid(4);
